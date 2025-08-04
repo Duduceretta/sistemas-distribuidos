@@ -1,10 +1,10 @@
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 
 /**
  *
@@ -13,12 +13,34 @@ import javax.swing.JOptionPane;
 public class JFrame_Principal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrame_Principal.class.getName());
-
+    public Set<Integer> pressed = new HashSet<>();
+    public int pontuacaoJogador1 = 0;
+    public int pontuacaoJogador2 = 0;
+    
     /**
      * Creates new form JFrame_Principal
      */
     public JFrame_Principal() {
         initComponents();
+        getContentPane().setLayout(null);
+        
+        //Thread que fica verificando as teclas pressionadas e soltadas a cada 40 ms
+        new Thread() {
+            public void run() {
+                while (true) {
+                    try {
+                        verificaTeclas();
+                        try {
+                            sleep(40);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(JFrame_Principal.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Erro na Thread: " + e.getMessage());
+                    }
+                }
+            }
+        }.start();
     }
 
     /**
@@ -33,8 +55,11 @@ public class JFrame_Principal extends javax.swing.JFrame {
         jButton_ghost1 = new javax.swing.JButton();
         jButton_ghost2 = new javax.swing.JButton();
         jButton_frutinha = new javax.swing.JButton();
+        jLabel_pontuacaoJogador1 = new javax.swing.JLabel();
+        jLabel_pontuacaoJogador2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jButton_ghost1.setText("1");
         jButton_ghost1.setFocusable(false);
@@ -47,129 +72,171 @@ public class JFrame_Principal extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jButton_frutinhaKeyPressed(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jButton_frutinhaKeyReleased(evt);
+            }
         });
+
+        jLabel_pontuacaoJogador1.setText("Jogador1 :  0");
+        jLabel_pontuacaoJogador1.setFocusable(false);
+
+        jLabel_pontuacaoJogador2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel_pontuacaoJogador2.setText("0  : Jogador2");
+        jLabel_pontuacaoJogador2.setFocusable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton_ghost2)
-                .addGap(148, 148, 148))
             .addGroup(layout.createSequentialGroup()
+                .addGap(56, 56, 56)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(102, 102, 102)
-                        .addComponent(jButton_ghost1))
+                        .addComponent(jLabel_pontuacaoJogador1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                        .addComponent(jLabel_pontuacaoJogador2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(168, 168, 168)
-                        .addComponent(jButton_frutinha)))
-                .addContainerGap(209, Short.MAX_VALUE))
+                        .addComponent(jButton_ghost1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton_frutinha)
+                        .addGap(93, 93, 93)
+                        .addComponent(jButton_ghost2)))
+                .addGap(83, 83, 83))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(68, 68, 68)
-                .addComponent(jButton_ghost1)
-                .addGap(17, 17, 17)
-                .addComponent(jButton_frutinha)
-                .addGap(10, 10, 10)
-                .addComponent(jButton_ghost2)
-                .addContainerGap(136, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel_pontuacaoJogador1)
+                    .addComponent(jLabel_pontuacaoJogador2))
+                .addGap(115, 115, 115)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton_ghost2)
+                    .addComponent(jButton_frutinha)
+                    .addComponent(jButton_ghost1))
+                .addContainerGap(140, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /***
+     * Pega o codigo da tecla pressionada e adiciona em um HashSet
+     * @param evt evento da tecla pressionada
+     */
     private void jButton_frutinhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton_frutinhaKeyPressed
-        // TODO add your handling code here:
-        
-        switch (evt.getKeyCode()) {
-            case 38:
-                new Thread(){
-                    @Override
-                    public void run(){
-                        Movimenta.cima(jButton_ghost1);
-                    }
-                }.start();
-                
-                break;
-            case 40:
-                new Thread(){
-                    @Override
-                    public void run(){
-                        Movimenta.baixo(jButton_ghost1, JFrame_Principal.this);
-                    }
-                }.start();
-                
-                break;
-            case 37:
-                new Thread(){
-                    @Override
-                    public void run(){
-                        Movimenta.esquerda(jButton_ghost1);
-                    }
-                }.start();
-                
-                break;
-            case 39:
-                new Thread(){
-                    @Override
-                    public void run(){
-                        Movimenta.direita(jButton_ghost1, JFrame_Principal.this);
-                    }
-                }.start();
-                break;
-            case 87:
-                new Thread(){
-                    @Override
-                    public void run(){
-                        Movimenta.cima(jButton_ghost1);
-                    }
-                }.start();
-                Movimenta.cima(jButton_ghost2);
-                break;
-            case 83:
-                new Thread(){
-                    @Override
-                    public void run(){
-                        Movimenta.cima(jButton_ghost1);
-                    }
-                }.start();
-                Movimenta.baixo(jButton_ghost2, this);
-                break;
-            case 65:
-                new Thread(){
-                    @Override
-                    public void run(){
-                        Movimenta.cima(jButton_ghost1);
-                    }
-                }.start();
-                Movimenta.esquerda(jButton_ghost2);
-                break;
-            case 68:
-                new Thread(){
-                    @Override
-                    public void run(){
-                        Movimenta.direita(jButton_ghost2, this);
-                    }
-                }.start();
-                
-                break;
-            default:
-                throw new AssertionError();
-        }
-        
-        if (jButton_ghost1.getBounds().intersects(jButton_frutinha.getBounds())) {
-            Movimenta.sorteiaPosicao(jButton_frutinha, this);
-        }
-        
-        if (jButton_ghost2.getBounds().intersects(jButton_frutinha.getBounds())) {
-            Movimenta.sorteiaPosicao(jButton_frutinha, this);
+        //Utiliza synchronized para evitar que duas ou mais threads 
+        //modifiquem o HashSet ao mesmo tempo
+        synchronized (JFrame_Principal.this) {
+            pressed.add(evt.getKeyCode());
         }
     }//GEN-LAST:event_jButton_frutinhaKeyPressed
 
+    /***
+     * Pega o codigo da tecla soltada e adiciona em um HashSet
+     * @param evt evento da tecla soltada
+     */
+    private void jButton_frutinhaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton_frutinhaKeyReleased
+        //Utiliza synchronized para evitar que duas ou mais threads 
+        //modifiquem o HashSet ao mesmo tempo
+        synchronized (JFrame_Principal.this) {
+            pressed.remove(evt.getKeyCode());
+        }
+    }//GEN-LAST:event_jButton_frutinhaKeyReleased
+
+    /***
+     * verifica quais teclas foram pressionadas e faz o movimento para cada uma
+     */
+    public void verificaTeclas(){
+        for(Integer tecla : pressed){
+            switch (tecla) {
+                case 38: Movimenta.cima(jButton_ghost1); break;
+                case 40: Movimenta.baixo(jButton_ghost1, this); break;
+                case 37: Movimenta.esquerda(jButton_ghost1); break;
+                case 39: Movimenta.direita(jButton_ghost1, this); break;
+                case 87: Movimenta.cima(jButton_ghost2); break;
+                case 83: Movimenta.baixo(jButton_ghost2, this); break;
+                case 65: Movimenta.esquerda(jButton_ghost2); break;
+                case 68: Movimenta.direita(jButton_ghost2, this); break;
+            }
+
+            //Se o jogador 1 pegou a frutinha
+            if (Util.pegou(jButton_frutinha, jButton_ghost1)) {
+                jButton_frutinha = Util.sorteiaPosicao(jButton_frutinha, JFrame_Principal.this, jButton_ghost1, jButton_ghost2);
+                pontuacaoJogador1++;
+                jLabel_pontuacaoJogador1.setText("Jogador1 : " + pontuacaoJogador1);
+            }
+            
+            //Se o jogador 2 pegou a frutinha
+            if (Util.pegou(jButton_frutinha, jButton_ghost2)) {
+                jButton_frutinha = Util.sorteiaPosicao(jButton_frutinha, JFrame_Principal.this, jButton_ghost1, jButton_ghost2);
+                pontuacaoJogador2++;
+                jLabel_pontuacaoJogador2.setText(pontuacaoJogador2 + " : Jogador2");
+            }
+            
+            //Se o jogador 1 ganhou (Conseguiu 10 pontos)
+            if(pontuacaoJogador1 == 10){
+                // LIMPA as teclas ANTES de mostrar o diálogo
+                synchronized (this) {
+                    pressed.clear();
+                }
+                
+                int resposta = JOptionPane.showConfirmDialog(this, 
+                    "Jogador 1 venceu!\nDeseja jogar novamente?", 
+                    "Fim de Jogo", 
+                    JOptionPane.YES_NO_OPTION);
+
+                if(resposta == JOptionPane.YES_OPTION){
+                    reiniciarJogo();
+                } else {
+                    // Fecha o jogo
+                    System.exit(0); 
+                }
+            //Se o jogador 2 ganhou (Conseguiu 10 pontos)
+            } else if (pontuacaoJogador2 == 10){
+                // LIMPA as teclas ANTES de mostrar o diálogo
+                synchronized (this) {
+                    pressed.clear();
+                }
+                
+                int resposta = JOptionPane.showConfirmDialog(this, 
+                    "Jogador 2 venceu!\nDeseja jogar novamente?", 
+                    "Fim de Jogo", 
+                    JOptionPane.YES_NO_OPTION);
+
+                if(resposta == JOptionPane.YES_OPTION){
+                    reiniciarJogo();
+                } else {
+                    System.exit(0); // Fecha o jogo
+                }
+            } 
+        }
+    }
+    
+    private void reiniciarJogo() {
+        // Zera as pontuações
+        pontuacaoJogador1 = 0;
+        pontuacaoJogador2 = 0;
+
+        // Atualiza os textos na tela
+        jLabel_pontuacaoJogador1.setText("Jogador1 : " + pontuacaoJogador1);
+        jLabel_pontuacaoJogador2.setText(pontuacaoJogador2 + " : Jogador2");
+
+        // REPOSICIONA MANUALMENTE nas posições iniciais
+        jButton_ghost1.setBounds(100, 200, jButton_ghost1.getWidth(), jButton_ghost1.getHeight());  // Posição inicial jogador 1
+        jButton_ghost2.setBounds(200, 200, jButton_ghost2.getWidth(), jButton_ghost2.getHeight()); // Posição inicial jogador 2
+        
+        // Sorteia nova posição só para a frutinha
+        jButton_frutinha = Util.sorteiaPosicao(jButton_frutinha, this, jButton_ghost1, jButton_ghost2);
+        
+        // Garante o foco na frutinha para capturar teclas
+        jButton_frutinha.requestFocus();
+
+        // Força repaint da tela
+        repaint();
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -199,5 +266,7 @@ public class JFrame_Principal extends javax.swing.JFrame {
     private javax.swing.JButton jButton_frutinha;
     private javax.swing.JButton jButton_ghost1;
     private javax.swing.JButton jButton_ghost2;
+    private javax.swing.JLabel jLabel_pontuacaoJogador1;
+    private javax.swing.JLabel jLabel_pontuacaoJogador2;
     // End of variables declaration//GEN-END:variables
 }
