@@ -1,4 +1,4 @@
-## O que é o Problema de Eleição?
+## O Que é o Problema de Eleição?
 - Uma tarefa crítica é atribuída a um único processo, que atua como coordenador ou líder. 
 - Se esse líder falha ou se o sistema é inicializado, os processos restantes precisam escolher um novo líder de forma cooperativa e consistente.
 
