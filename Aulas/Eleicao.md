@@ -4,6 +4,8 @@
 
 O problema de eleição é o processo de designar um único processo entre um grupo como o novo líder, de forma que todos os outros processos concordem com a escolha.
 
+---
+
 Principais Algoritmos de Eleição
 Algoritmo do Valentão e o Algoritmo do Anel.
 
@@ -20,6 +22,8 @@ Vantagens: Simples de entender e robusto. Garante que o processo com o maior ID 
 
 Desvantagens: Gera um grande volume de mensagens, especialmente se um processo com um ID baixo inicia a eleição. Pode ser ineficiente.
 
+---
+
 2. Algoritmo do Anel (Ring Algorithm)
 Princípio: Os processos são organizados em uma estrutura de anel lógico, onde cada processo sabe quem é o próximo na sequência.
 
@@ -33,3 +37,5 @@ Como Funciona:
 Vantagens: Mais eficiente em termos de mensagens, pois a informação circula em apenas uma direção.
 
 Desvantagens: A falha de um único processo no anel pode interromper a eleição. A topologia de anel precisa ser mantida.
+
+---
