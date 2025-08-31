@@ -8,23 +8,23 @@ import java.util.Random;
  * @author Eduardo
  */
 public class PopulaLista extends Thread{
-    private final List<Integer> lista;
-    private final int tamanho;
+    private final List<Integer> listaIndividual;
+    private final int tamanhoDaLista;
 
-    // Construtor
-    public PopulaLista(List<Integer> lista, Integer tamanho) {
-        this.lista = lista;
-        this.tamanho = tamanho;
+    public PopulaLista(List<Integer> listaIndividual, Integer tamanhoDaLista) {
+        this.listaIndividual = listaIndividual;
+        this.tamanhoDaLista = tamanhoDaLista;
     }
 
     @Override
     public void run() {
-        // Aqui que está a tarefa ou rotina a ser concomitada
-        // Popula a lista com numeros aleatorios entre 1000 e 100000
+        // Rotina a ser concomitada
+        
         Random random = new Random();
-        for (int i = 0; i < tamanho; i++) {
+        
+        for (int i = 0; i < tamanhoDaLista; i++) {
             int numeroAleatorio = random.nextInt(1000, 100001);
-            lista.add(numeroAleatorio);
+            listaIndividual.add(numeroAleatorio);
         }
     }
 }
