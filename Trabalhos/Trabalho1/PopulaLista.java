@@ -11,7 +11,7 @@ public class PopulaLista extends Thread{
     private final List<Integer> listaIndividual;
     private final int tamanhoDaLista;
 
-    public PopulaLista(List<Integer> listaIndividual, Integer tamanhoDaLista) {
+    public PopulaLista(List<Integer> listaIndividual, int tamanhoDaLista) {
         this.listaIndividual = listaIndividual;
         this.tamanhoDaLista = tamanhoDaLista;
     }

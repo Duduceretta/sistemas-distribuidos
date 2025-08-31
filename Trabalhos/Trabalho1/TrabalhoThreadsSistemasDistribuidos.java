@@ -44,7 +44,7 @@ public class TrabalhoThreadsSistemasDistribuidos {
     private static List<Thread> popularListasEmParalelo (List<List<Integer>> listaDeListas, int numerosPorLista){
         List<Thread> threadsAtivas = new ArrayList<>();
         
-        for (List listaIndividual : listaDeListas) {
+        for (List<Integer> listaIndividual : listaDeListas) {
             Thread novaThread = new PopulaLista(listaIndividual, numerosPorLista);
             threadsAtivas.add(novaThread);
             novaThread.start();
