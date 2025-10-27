@@ -11,8 +11,24 @@ def gera_email(nome):
 	return email_gerado
 
 
-servidor = SimpleXMLRPCServer(("localhost", 8000))
-print("Ouvindo a porta 8000...")
+def retira_strings(frase):
+	artigos_definidos = ["o", "a", "os", "as"]
+
+	artigos_indefinidos = ["um", "uma", "uns", "umas"]
+
+	artigos = artigos_definidos + artigos_indefinidos
+
+	palavras = frase.split()
+
+	palavrs_sem_artigos = (p for p in palavras if p.lower() not in artigos)
+
+	frase_sem_artigos = " ".join(palavrs_sem_artigos)
+	return frase_sem_artigos
+
+
+servidor = SimpleXMLRPCServer(("localhost", 4000))
+print("Ouvindo a porta 4000...")
 servidor.register_function(hoje_eh, "hoje")
 servidor.register_function(gera_email, "email_gerado")
+servidor.register_function(retira_strings, "frase_sem_artigos")
 servidor.serve_forever()
